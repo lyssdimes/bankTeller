@@ -3,15 +3,53 @@
  */
 package bankteller;
 
-import org.checkerframework.checker.units.qual.A;
+import java.util.Scanner;
 
 public class App {
 
     public static void main(String[] args) {
         Bank bank = new Bank();
-        Account checkings = new Account("2342", "checkings", 34039535);
-        Account savings = new Account("2324", "savings", 23242);
+        Account checkings = new Account("2342", "checkings", 3403);
+        Account savings = new Account("2324", "savings", 2322);
         bank.openNewAccount(checkings.getAccountNumber(), checkings);
         bank.openNewAccount(savings.getAccountNumber(), savings);
+        System.out.println("Welcome to the bank!");
+        System.out.println("Please enter your account number to begin:");
+        Scanner input = new Scanner(System.in);
+        String userInput = input.nextLine();
+        System.out.println("Now accessing account number " + userInput);
+        boolean notDone = true;
+        do {
+            System.out.println("Please enter a number for what you would like to do:");
+            System.out.println("1: Make a deposit");
+            System.out.println("2: Make a withdrawal");
+            System.out.println("3: Check the balance of the account");
+            System.out.println("4: Close your account");
+            System.out.println("5: Exit the application");
+            int userChoice = input.nextInt();
+            if (userChoice > 5 || userChoice < 1) {
+                System.out.println("Please try again");
+            } else if (userChoice == 1) {
+                System.out.println("How much money would you like to deposit? ");
+                float userChoice1 = input.nextFloat();
+                bank.getAccount(userInput).deposit(userChoice1);
+                System.out.println("Your new balance is: " + bank.getAccount(userInput).getAccountBalance());
+            } else if (userChoice == 2) {
+                System.out.println("How much money would you like to withdraw? You currently have: "
+                        + bank.getAccount(userInput).getAccountBalance());
+                float userChoice2 = input.nextFloat();
+                bank.getAccount(userInput).withdraw(userChoice2);
+                System.out.println("Your new balance is: " + bank.getAccount(userInput).getAccountBalance());
+            } else if (userChoice == 3) {
+                System.out.println("The balance of your account is: " + bank.getAccount(userInput).getAccountBalance());
+            } else if (userChoice == 4) {
+                bank.closeAccount(userInput);
+                System.out.println("Your account is now closed");
+            } else if (userChoice == 5) {
+                System.out.println("Thank you for accessing the bank. Good bye!");
+                notDone = true;
+            }
+        } while (notDone);
+        input.close();
     }
 }
